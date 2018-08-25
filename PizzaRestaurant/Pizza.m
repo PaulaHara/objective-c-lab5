@@ -10,7 +10,7 @@
 
 @implementation Pizza
 
-- (id)initWithSize:(PizzaSizes *)size
+- (id)initWithSize:(PizzaSize) size
           toppings:(NSArray <NSString *> *) aToppings{
     self = [super init];
     if(self){
@@ -20,11 +20,32 @@
     return self;
 }
 
-- (float)pizzaValueBySize:(PizzaSizes *)size{
-    return 2.3;
++ (Pizza *)largeMozzarella{
+    return [[Pizza alloc] initWithSize:large toppings:[NSArray arrayWithObjects:@"mozzarella", @"olives", nil]];
 }
 
-- (NSArray <NSString *> *)getToppings{
++ (Pizza *)largeTuna{
+    return [[Pizza alloc] initWithSize:large toppings:[NSArray arrayWithObjects:@"tuna", @"cheese", @"onions", nil]];
+}
+
++ (Pizza *)pepperoniWithSize:(PizzaSize) size{
+    return [[Pizza alloc] initWithSize:size toppings:[NSArray arrayWithObjects:@"pepperoni", @"cheese", @"tomatos", @"onions", nil]];
+}
+
+- (float)pizzaValueBySize:(PizzaSize) size{
+    switch(size){
+        case small:
+            return 12.2;
+        case medium:
+            return 15.8;
+        case large:
+            return 22.5;
+        default:
+            break;
+    }
+}
+
+- (NSArray <NSString *> *) getToppings{
     return self.toppings;
 }
 

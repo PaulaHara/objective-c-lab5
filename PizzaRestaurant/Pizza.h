@@ -10,20 +10,26 @@
 
 @interface Pizza : NSObject
 
-typedef enum pizzaSizeTypes
+typedef enum
 {
-    SMALL,
-    MEDIUM,
-    LARGE
-} PizzaSizes;
+    small,
+    medium,
+    large
+} PizzaSize;
 
-@property PizzaSizes *pizzaSize;
+@property PizzaSize pizzaSize;
 @property NSArray <NSString *> *toppings;
 
-- (id)initWithSize:(PizzaSizes *)size
+- (id)initWithSize:(PizzaSize)size
           toppings:(NSArray <NSString *> *) aToppings;
 
-- (float)pizzaValueBySize:(PizzaSizes *)size;
++ (Pizza *)largeMozzarella;
+
++ (Pizza *)largeTuna;
+
++ (Pizza *)pepperoniWithSize:(PizzaSize)size;
+
+- (float)pizzaValueBySize:(PizzaSize)size;
 
 - (NSArray <NSString *> *)getToppings;
 

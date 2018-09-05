@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 
 #import "Kitchen.h"
+#import "Manager.h"
+#import "NiceManager.h"
+#import "PizzaUtils.h"
 
 int getPizzaSizeByNSString(NSString *size);
 NSString* getPizzaSize(int size);
@@ -17,13 +20,46 @@ void printPizza(Pizza *pizza);
 int main(int argc, const char * argv[])
 {
     @autoreleasepool {
-        NSLog(@"Please pick your pizza size and toppings:");
-        
         Kitchen *restaurantKitchen = [Kitchen new];
         Pizza *pizza;
+        Manager *manager = nil;
+        NiceManager *niceManager = nil;
+        PizzaUtils *pizzaUtils = [[PizzaUtils alloc] init];
         NSString *option = @"";
+        NSInteger managerOption;
         
         while (![option isEqualToString:@"quit"]) {
+            NSLog(@"\n1 - Manager\n2 - Nice Manager\n3 - No Manager\n");
+            char strM[10];
+            fgets (strM, 10, stdin);
+            NSString *inputManager = [[NSString alloc] initWithUTF8String:strM];
+            managerOption = [[inputManager stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] integerValue];
+            
+            if(managerOption == 1){
+                if(!manager){
+                    manager = [[Manager alloc] init];
+                }
+                restaurantKitchen.kitchenDelegate = manager;
+            }else if(managerOption == 2){
+                if(!niceManager){
+                    niceManager = [[NiceManager alloc] initWithDeliveryService];
+                }
+                restaurantKitchen.kitchenDelegate = niceManager;
+            }else{
+                restaurantKitchen.kitchenDelegate = nil;
+            }
+            
+            if(managerOption == 4){
+                NSArray *pizzas = [[niceManager delivery] pizzasDelivered];
+                NSMutableString *strPizzas = [[NSMutableString alloc] init];
+                
+                for(int i = 0; i < [pizzas count]; i++){
+                    [strPizzas appendFormat:@"%@\n", [pizzas objectAtIndex:i]];
+                }
+                NSLog(@"Pizzas delivered:\n%@", strPizzas);
+            }
+            
+            NSLog(@"Please pick your pizza size and toppings:");
             NSLog(@"> ");
             char str[100];
             fgets (str, 100, stdin);
@@ -52,17 +88,17 @@ int main(int argc, const char * argv[])
             
             if([option isEqualToString:@"mozzarella"] && [sizeCommand isEqualToString:@""]){
                 pizza = [restaurantKitchen makeMozzarellaPizza];
-                printPizza(pizza);
+                [pizzaUtils printPizza:pizza];
             }else if([option isEqualToString:@"tuna"]  && [sizeCommand isEqualToString:@""]){
                 pizza = [restaurantKitchen makeTunaPizza];
-                printPizza(pizza);
+                [pizzaUtils printPizza:pizza];
             }else if([option isEqualToString:@"pepperoni"]){
                 pizza = [restaurantKitchen makePepperoniPizzaWithSize:getPizzaSizeByNSString(sizeCommand)];
-                printPizza(pizza);
+                [pizzaUtils printPizza:pizza];
             }else if(![option isEqualToString:@"quit"]){
                 // And then send some message to the kitchen...
                 pizza = [restaurantKitchen makePizzaWithSize:getPizzaSizeByNSString(sizeCommand) toppings:mutableCommands];
-                printPizza(pizza);
+                [pizzaUtils printPizza:pizza];
             }
         }
     }
@@ -77,42 +113,4 @@ int getPizzaSizeByNSString(NSString *size){
     }else{
         return large;
     }
-}
-
-NSString* getPizzaSize(int size){
-    switch (size) {
-        case small:
-            return @"small";
-        case medium:
-            return @"medium";
-        case large:
-            return @"large";
-        default:
-            return @"";
-    }
-}
-
-void printPizza(Pizza *pizza){
-    NSMutableString *pizzaMade = [[NSMutableString alloc] init];
-    [pizzaMade appendFormat:@"\nA %@ pizza with ", getPizzaSize(pizza.pizzaSize)];
-    
-    if([pizza.toppings count] == 0){
-        [pizzaMade appendString:@"no topping "];
-    }else{
-        for(int topIndex = 0; topIndex < [pizza.toppings count]; topIndex++){
-            [pizzaMade appendString:[pizza.toppings objectAtIndex:topIndex]];
-            
-            if(topIndex == [pizza.toppings count]-2){
-                [pizzaMade appendString:@" and "];
-            }else if(topIndex == [pizza.toppings count]-1){
-                [pizzaMade appendString:@" "];
-            }else{
-                [pizzaMade appendString:@", "];
-            }
-        }
-    }
-    
-    [pizzaMade appendString:@"was made."];
-    
-    NSLog(@"%@", pizzaMade);
 }

@@ -7,11 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DeliveryService.h"
 
 @protocol KitchenDelegate;
 
 @interface NiceManager : NSObject
 
 @property (nonatomic, weak) id<KitchenDelegate> delegate;
+@property DeliveryService *delivery;
+
+- (id)initWithDeliveryService;
 
 @end

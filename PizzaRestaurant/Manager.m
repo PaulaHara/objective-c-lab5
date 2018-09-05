@@ -7,7 +7,19 @@
 //
 
 #import "Manager.h"
+#import "Kitchen.h"
+#import "Pizza.h"
 
 @implementation Manager
+
+- (BOOL)kitchen:(Kitchen *) kitchen
+shouldMakePizzaOfSize:(PizzaSize) size
+    andToppings:(NSArray *) toppings{
+    return !([toppings containsObject:@"anchovies"]);
+}
+
+- (BOOL)kitchenShouldUpgradeOrder:(Kitchen *) kitchen{
+    return NO;
+}
 
 @end

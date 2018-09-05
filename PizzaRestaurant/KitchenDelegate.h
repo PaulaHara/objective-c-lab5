@@ -8,16 +8,17 @@
 
 #import <Foundation/Foundation.h>
 #import "Pizza.h"
-#import "Kitchen.h"
 
-@interface KitchenDelegate : NSDeleteCommand
+@class Kitchen;
 
-- (BOOL)kitchen:(Kitchen *) kitchen
-shouldMakePizzaOfSize:(PizzaSize) size
-    andToppings:(NSArray *) toppings;
+@protocol KitchenDelegate <NSObject>
 
-- (BOOL)kitchenShouldUpgradeOrder:(Kitchen *) kitchen;
+- (BOOL)kitchen:(Kitchen *)kitchen shouldMakePizzaOfSize:(PizzaSize)size andToppings:(NSArray *)toppings;
 
-- (void)kitchenDidMakePizza:(Pizza *) pizza;
+- (BOOL)kitchenShouldUpgradeOrder:(Kitchen *)kitchen;
+
+@optional
+
+-(void)kitchenDidMakePizza:(Pizza *)pizza;
 
 @end

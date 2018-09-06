@@ -85,19 +85,24 @@ int main(int argc, const char * argv[])
                     }
                 }
                 
+                // To order mozzarella or tuna -> just put "tuna" or "mozzarella"
+                // To order pepperoni -> choose the size and write "pepperoni" like this: "small pepperoni"
+                // This commands make pizzas without a manager
                 if([option isEqualToString:@"mozzarella"] && [sizeCommand isEqualToString:@""]){
                     pizza = [restaurantKitchen makeMozzarellaPizza];
                     [pizzaUtils printPizza:pizza];
                 }else if([option isEqualToString:@"tuna"]  && [sizeCommand isEqualToString:@""]){
                     pizza = [restaurantKitchen makeTunaPizza];
                     [pizzaUtils printPizza:pizza];
-                }else if([option isEqualToString:@"pepperoni"]){
+                }else if([option isEqualToString:@"pepperoni"] && ![sizeCommand isEqualToString:@""]){
                     pizza = [restaurantKitchen makePepperoniPizzaWithSize:getPizzaSizeByNSString(sizeCommand)];
                     [pizzaUtils printPizza:pizza];
-                }else if(![option isEqualToString:@"quit"]){
-                    // And then send some message to the kitchen...
+                }else if(![option isEqualToString:@"quit"] && ![sizeCommand isEqualToString:@""]){
+                    // Order pizza using size and a list of toppings with or without a manager
                     pizza = [restaurantKitchen makePizzaWithSize:getPizzaSizeByNSString(sizeCommand) toppings:mutableCommands];
                     [pizzaUtils printPizza:pizza];
+                }else{
+                    NSLog(@"\nIncorrect Command!");
                 }
             }
         }

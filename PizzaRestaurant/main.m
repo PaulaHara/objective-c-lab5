@@ -29,7 +29,7 @@ int main(int argc, const char * argv[])
         NSInteger managerOption;
         
         while (![option isEqualToString:@"quit"]) {
-            NSLog(@"\n1 - Manager\n2 - Nice Manager\n3 - No Manager\n4 - Delivered Pizzas\n");
+            NSLog(@"\n1 - Manager\n2 - Nice Manager\n3 - No Manager\n4 - Delivered Pizzas\n5 - Quit\n");
             char strM[10];
             fgets (strM, 10, stdin);
             NSString *inputManager = [[NSString alloc] initWithUTF8String:strM];
@@ -57,6 +57,9 @@ int main(int argc, const char * argv[])
                     [strPizzas appendFormat:@"%@\n", [pizzas objectAtIndex:i]];
                 }
                 NSLog(@"\nPizzas delivered:\n%@", strPizzas);
+            }else if(managerOption == 5){
+                option = @"quit";
+                NSLog(@"\nBye bye! =D");
             }else{
                 NSLog(@"Please pick your pizza size and toppings:");
                 NSLog(@"> ");
@@ -101,6 +104,8 @@ int main(int argc, const char * argv[])
                     // Order pizza using size and a list of toppings with or without a manager
                     pizza = [restaurantKitchen makePizzaWithSize:getPizzaSizeByNSString(sizeCommand) toppings:mutableCommands];
                     [pizzaUtils printPizza:pizza];
+                }else if([option isEqualToString:@"quit"]){
+                    NSLog(@"\nBye bye! =D");
                 }else{
                     NSLog(@"\nIncorrect Command!");
                 }
